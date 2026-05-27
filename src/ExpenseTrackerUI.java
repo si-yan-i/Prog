@@ -25,10 +25,10 @@ public class ExpenseTrackerUI extends JFrame {
 
     private static final Color[] CAT_COLORS = {
             new Color(29, 158, 117),   // FOOD     - teal hahahhaah
-            new Color(55, 138, 221),   // TRANSPORT - blue
+            new Color(55, 138, 221),   // TRANSPORT - blue???
             new Color(212, 83, 126),   // SHOPPING  - pink
             new Color(226, 75, 74),    // HEALTH    - red
-            new Color(186, 117, 23),   // UTILITY   - amber
+            new Color(186, 117, 23),   // UTILITY   - amber na lng
             new Color(136, 135, 128),  // OTHER     - gray
     };
 
@@ -39,7 +39,7 @@ public class ExpenseTrackerUI extends JFrame {
     private JPanel budgetBarPanel;
     private JTable expenseTable;
     private DefaultTableModel tableModel;
-    private ExpenseCategory activeFilter = null; // null = All
+    private ExpenseCategory activeFilter = null; 
     private JPanel weeklyPanel;
     private DonutChartPanel donutChart;
     private Toast toast;
