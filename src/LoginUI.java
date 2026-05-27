@@ -7,12 +7,12 @@ import javax.swing.border.*;
 public class LoginUI extends JFrame {
 
 
-    private static final Color BG_PRIMARY   = new Color(250, 250, 249);
-    private static final Color BG_SECONDARY = new Color(243, 242, 240);
-    private static final Color BG_CARD      = Color.WHITE;
-    private static final Color BORDER_COLOR = new Color(220, 218, 213);
-    private static final Color TEXT_PRIMARY = new Color(28, 28, 26);
-    private static final Color TEXT_MUTED   = new Color(120, 118, 112);
+    private final Color BG_PRIMARY;
+    private final Color BG_SECONDARY;
+    private final Color BG_CARD;
+    private final Color BORDER_COLOR;
+    private final Color TEXT_PRIMARY;
+    private final Color TEXT_MUTED;
     private static final Color ACCENT_BLUE  = new Color(24, 95, 165);
     private static final Color ACCENT_RED   = new Color(163, 45, 45);
 
@@ -24,6 +24,12 @@ public class LoginUI extends JFrame {
         super("CentSible — Login");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setMinimumSize(new Dimension(380, 460));
+        BG_PRIMARY = uiColor("Panel.background", "control", new Color(250, 250, 249));
+        BG_SECONDARY = uiColor("TextField.background", "controlHighlight", new Color(243, 242, 240));
+        BG_CARD = uiColor("Panel.background", "control", Color.WHITE);
+        BORDER_COLOR = uiColor("Component.borderColor", "Separator.foreground", new Color(220, 218, 213));
+        TEXT_PRIMARY = uiColor("Label.foreground", "TextField.foreground", new Color(28, 28, 26));
+        TEXT_MUTED = uiColor("textInactiveText", "Label.disabledForeground", new Color(120, 118, 112));
         setBackground(BG_PRIMARY);
 
         JPanel root = new JPanel(new GridBagLayout());
@@ -167,8 +173,8 @@ public class LoginUI extends JFrame {
         JTextField f = new JTextField(20);
         f.setFont(new Font("SansSerif", Font.PLAIN, 13));
         f.setBackground(BG_SECONDARY);
-        f.setForeground(Color.WHITE);
-        f.setCaretColor(Color.WHITE);
+        f.setForeground(TEXT_PRIMARY);
+        f.setCaretColor(TEXT_PRIMARY);
         f.setBorder(BorderFactory.createCompoundBorder(
                 new LineBorder(BORDER_COLOR, 1, true),
                 new EmptyBorder(6, 10, 6, 10)));
@@ -182,8 +188,8 @@ public class LoginUI extends JFrame {
         JPasswordField f = new JPasswordField(20);
         f.setFont(new Font("SansSerif", Font.PLAIN, 13));
         f.setBackground(BG_SECONDARY);
-        f.setForeground(Color.WHITE);
-        f.setCaretColor(Color.WHITE);
+        f.setForeground(TEXT_PRIMARY);
+        f.setCaretColor(TEXT_PRIMARY);
         f.setBorder(BorderFactory.createCompoundBorder(
                 new LineBorder(BORDER_COLOR, 1, true),
                 new EmptyBorder(6, 10, 6, 10)));
@@ -228,6 +234,15 @@ public class LoginUI extends JFrame {
         sep.setForeground(BORDER_COLOR);
         sep.setMaximumSize(new Dimension(Integer.MAX_VALUE, 1));
         return sep;
+    }
+
+    private static Color uiColor(String key1, String key2, Color fallback) {
+        Color color = UIManager.getColor(key1);
+        if (color != null) {
+            return color;
+        }
+        color = UIManager.getColor(key2);
+        return color != null ? color : fallback;
     }
 
 

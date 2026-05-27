@@ -11,16 +11,25 @@ import javax.swing.table.*;
 
 public class ExpenseTrackerUI extends JFrame {
 
-    private static final Color BG_PRIMARY = new Color(245, 246, 250);
-    private static final Color BG_SECONDARY = new Color(243, 242, 240);
-    private static final Color BG_CARD = Color.WHITE;
-    private static final Color BORDER_COLOR = new Color(220, 218, 213);
-    private static final Color TEXT_PRIMARY = new Color(35, 35, 45);
-    private static final Color TEXT_MUTED = new Color(120, 125, 140);
+    private final Color BG_PRIMARY;
+    private final Color BG_SECONDARY;
+    private final Color BG_CARD;
+    private final Color BORDER_COLOR;
+    private final Color TEXT_PRIMARY;
+    private final Color TEXT_MUTED;
     private static final Color ACCENT_BLUE = new Color(47, 106, 229);
     private static final Color ACCENT_GREEN = new Color(25, 135, 84);
     private static final Color ACCENT_RED = new Color(220, 53, 69);
     private static final Color ACCENT_AMBER = new Color(133, 79, 11);
+
+    private static Color uiColor(String key1, String key2, Color fallback) {
+        Color color = UIManager.getColor(key1);
+        if (color != null) {
+            return color;
+        }
+        color = UIManager.getColor(key2);
+        return color != null ? color : fallback;
+    }
 
 
     private static final Color[] CAT_COLORS = {
@@ -52,6 +61,12 @@ public class ExpenseTrackerUI extends JFrame {
     public ExpenseTrackerUI(String username) {
         super("CentSible: Expense Tracker");
         this.loggedInUser = (username != null && !username.isBlank()) ? username : "User";
+        BG_PRIMARY = uiColor("Panel.background", "control", new Color(245, 246, 250));
+        BG_SECONDARY = uiColor("TextField.background", "controlHighlight", new Color(243, 242, 240));
+        BG_CARD = uiColor("Panel.background", "control", Color.WHITE);
+        BORDER_COLOR = uiColor("Component.borderColor", "Separator.foreground", new Color(220, 218, 213));
+        TEXT_PRIMARY = uiColor("Label.foreground", "TextField.foreground", new Color(35, 35, 45));
+        TEXT_MUTED = uiColor("textInactiveText", "Label.disabledForeground", new Color(120, 125, 140));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setMinimumSize(new Dimension(980, 680));
         setBackground(BG_PRIMARY);
@@ -107,7 +122,7 @@ public class ExpenseTrackerUI extends JFrame {
         chartBtn.addActionListener(e -> ExpenseTracker.showChart());
         right.add(chartBtn);
 
-        JButton exportBtn = styledBtn("⬇ Export CSV", ACCENT_BLUE, Color.BLACK);
+        JButton exportBtn = styledBtn("⬇ Export CSV", ACCENT_BLUE, Color.WHITE);
         exportBtn.addActionListener(e -> exportCSV());
         right.add(exportBtn);
 
@@ -181,7 +196,6 @@ public class ExpenseTrackerUI extends JFrame {
 
     private JPanel buildAddPanel() {
         JPanel card = card("Add Expense");
-        card.setBackground(new Color(240, 245, 250));
         card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
 
         descField = inputField("e.g. Grocery run");
@@ -201,7 +215,7 @@ public class ExpenseTrackerUI extends JFrame {
 
         JPanel btnRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 6, 0));
         btnRow.setOpaque(false);
-        addBtn = styledBtn("✓ Add Expense", ACCENT_BLUE, Color.BLACK);
+        addBtn = styledBtn("✓ Add Expense", ACCENT_BLUE, Color.WHITE);
         JButton clearBtn = styledBtn("Clear", BG_SECONDARY, TEXT_PRIMARY);
         addBtn.addActionListener(e -> submitExpense());
         clearBtn.addActionListener(e -> cancelEdit());
@@ -214,14 +228,13 @@ public class ExpenseTrackerUI extends JFrame {
 
     private JPanel buildBudgetPanel() {
         JPanel card = card("Budget");
-        card.setBackground(new Color(255, 255, 255));
         card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
 
         budgetField = inputField("e.g. 5000.00");
         card.add(formRow("Monthly Budget (₱)", budgetField));
         card.add(Box.createVerticalStrut(6));
 
-        JButton setBtn = styledBtn("Set Budget", ACCENT_BLUE, Color.BLACK);
+        JButton setBtn = styledBtn("Set Budget", ACCENT_BLUE, Color.WHITE);
         setBtn.addActionListener(e -> setBudget());
         JPanel btnRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         btnRow.setOpaque(false);
@@ -239,7 +252,6 @@ public class ExpenseTrackerUI extends JFrame {
 
     private JPanel buildWeeklyPanel() {
         JPanel card = card("Weekly Breakdown");
-        card.setBackground(new Color(248, 247, 244));
         card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
         weeklyPanel = new JPanel();
         weeklyPanel.setLayout(new BoxLayout(weeklyPanel, BoxLayout.Y_AXIS));
@@ -360,7 +372,7 @@ public class ExpenseTrackerUI extends JFrame {
         expenseTable.setIntercellSpacing(new Dimension(0, 4));
         expenseTable.setBackground(BG_PRIMARY);
         expenseTable.setForeground(TEXT_PRIMARY);
-        expenseTable.setSelectionBackground(new Color(230, 241, 251));
+        expenseTable.setSelectionBackground(uiColor("Table.selectionBackground", "nimbusSelectionBackground", new Color(230, 241, 251)));
         expenseTable.setSelectionForeground(TEXT_PRIMARY);
         expenseTable.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 11));
         expenseTable.getTableHeader().setForeground(TEXT_PRIMARY);
@@ -747,8 +759,8 @@ public class ExpenseTrackerUI extends JFrame {
         JTextField f = new JTextField(18);
         f.setFont(new Font("SansSerif", Font.PLAIN, 13));
         f.setBackground(BG_SECONDARY);
-        f.setForeground(Color.WHITE);
-        f.setCaretColor(Color.WHITE);
+        f.setForeground(TEXT_PRIMARY);
+        f.setCaretColor(TEXT_PRIMARY);
         f.setBorder(BorderFactory.createCompoundBorder(
                 new LineBorder(BORDER_COLOR, 1, true),
                 new EmptyBorder(4, 8, 4, 8)));
@@ -800,7 +812,7 @@ public class ExpenseTrackerUI extends JFrame {
 
         public Component getTableCellRendererComponent(
                 JTable t, Object v, boolean sel, boolean foc, int r, int c) {
-            p.setBackground(sel ? new Color(230, 241, 251) : BG_PRIMARY);
+            p.setBackground(sel ? t.getSelectionBackground() : BG_PRIMARY);
             edit.setBackground(BG_SECONDARY);
             del.setBackground(BG_SECONDARY);
             return p;
@@ -816,7 +828,7 @@ public class ExpenseTrackerUI extends JFrame {
 
         ActionEditor() {
             p.setOpaque(true);
-            p.setBackground(new Color(230, 241, 251));
+            p.setBackground(BG_SECONDARY);
             // Buttons delegate to outer class methods via the stored realIndex.
             edit.addActionListener(e -> {
                 int idx = realIndex;
@@ -861,7 +873,7 @@ public class ExpenseTrackerUI extends JFrame {
     }
 
 
-    static class DonutChartPanel extends JPanel {
+    class DonutChartPanel extends JPanel {
         private List<Expense> expenses = new ArrayList<>();
 
         DonutChartPanel() {
@@ -927,7 +939,7 @@ public class ExpenseTrackerUI extends JFrame {
         }
     }
 
-    static class Toast {
+    class Toast {
         private final JWindow window;
         private final JLabel label;
         private final JFrame parent;
