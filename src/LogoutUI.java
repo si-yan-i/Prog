@@ -1,7 +1,7 @@
-import javax.swing.*;
-import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.border.*;
 
 
 public class LogoutUI extends JFrame {
@@ -20,10 +20,7 @@ public class LogoutUI extends JFrame {
     public LogoutUI(String username) {
         super("CentSible — Logged Out");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(420, 340);
         setMinimumSize(new Dimension(360, 300));
-        setLocationRelativeTo(null);
-        setResizable(false);
         setBackground(BG_PRIMARY);
 
         JPanel root = new JPanel(new GridBagLayout());
@@ -94,6 +91,10 @@ public class LogoutUI extends JFrame {
         btnRow.add(loginAgainBtn);
         btnRow.add(exitBtn);
         card.add(btnRow);
+
+        pack();
+        setLocationRelativeTo(null);
+        setResizable(true);
     }
 
 

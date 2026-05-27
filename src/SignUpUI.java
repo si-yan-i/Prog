@@ -1,7 +1,7 @@
-import javax.swing.*;
-import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.border.*;
 
 
 public class SignUpUI extends JFrame {
@@ -25,10 +25,7 @@ public class SignUpUI extends JFrame {
     public SignUpUI() {
         super("CentSible — Create Account");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(420, 560);
         setMinimumSize(new Dimension(380, 500));
-        setLocationRelativeTo(null);
-        setResizable(false);
         setBackground(BG_PRIMARY);
 
         JPanel root = new JPanel(new GridBagLayout());
@@ -130,6 +127,10 @@ public class SignUpUI extends JFrame {
 
         // Enter key on confirm field submits
         confirmField.addActionListener(e -> handleSignUp());
+
+        pack();
+        setLocationRelativeTo(null);
+        setResizable(true);
     }
 
 
@@ -205,10 +206,11 @@ public class SignUpUI extends JFrame {
     }
 
     private JTextField styledTextField(String placeholder) {
-        JTextField f = new JTextField();
+        JTextField f = new JTextField(20);
         f.setFont(new Font("SansSerif", Font.PLAIN, 13));
         f.setBackground(BG_SECONDARY);
-        f.setForeground(TEXT_PRIMARY);
+        f.setForeground(Color.WHITE);
+        f.setCaretColor(Color.WHITE);
         f.setBorder(BorderFactory.createCompoundBorder(
                 new LineBorder(BORDER_COLOR, 1, true),
                 new EmptyBorder(6, 10, 6, 10)));
@@ -219,10 +221,11 @@ public class SignUpUI extends JFrame {
     }
 
     private JPasswordField styledPasswordField(String placeholder) {
-        JPasswordField f = new JPasswordField();
+        JPasswordField f = new JPasswordField(20);
         f.setFont(new Font("SansSerif", Font.PLAIN, 13));
         f.setBackground(BG_SECONDARY);
-        f.setForeground(TEXT_PRIMARY);
+        f.setForeground(Color.WHITE);
+        f.setCaretColor(Color.WHITE);
         f.setBorder(BorderFactory.createCompoundBorder(
                 new LineBorder(BORDER_COLOR, 1, true),
                 new EmptyBorder(6, 10, 6, 10)));

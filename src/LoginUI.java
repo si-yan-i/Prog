@@ -1,7 +1,7 @@
-import javax.swing.*;
-import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.border.*;
 
 
 public class LoginUI extends JFrame {
@@ -23,10 +23,7 @@ public class LoginUI extends JFrame {
     public LoginUI() {
         super("CentSible — Login");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(420, 520);
         setMinimumSize(new Dimension(380, 460));
-        setLocationRelativeTo(null);
-        setResizable(false);
         setBackground(BG_PRIMARY);
 
         JPanel root = new JPanel(new GridBagLayout());
@@ -114,6 +111,9 @@ public class LoginUI extends JFrame {
         usernameField.addActionListener(enterAction);
         passwordField.addActionListener(enterAction);
 
+        pack();
+        setLocationRelativeTo(null);
+        setResizable(true);
     }
 
 
@@ -164,10 +164,11 @@ public class LoginUI extends JFrame {
     }
 
     private JTextField styledTextField(String placeholder) {
-        JTextField f = new JTextField();
+        JTextField f = new JTextField(20);
         f.setFont(new Font("SansSerif", Font.PLAIN, 13));
         f.setBackground(BG_SECONDARY);
-        f.setForeground(TEXT_PRIMARY);
+        f.setForeground(Color.WHITE);
+        f.setCaretColor(Color.WHITE);
         f.setBorder(BorderFactory.createCompoundBorder(
                 new LineBorder(BORDER_COLOR, 1, true),
                 new EmptyBorder(6, 10, 6, 10)));
@@ -178,10 +179,11 @@ public class LoginUI extends JFrame {
     }
 
     private JPasswordField styledPasswordField(String placeholder) {
-        JPasswordField f = new JPasswordField();
+        JPasswordField f = new JPasswordField(20);
         f.setFont(new Font("SansSerif", Font.PLAIN, 13));
         f.setBackground(BG_SECONDARY);
-        f.setForeground(TEXT_PRIMARY);
+        f.setForeground(Color.WHITE);
+        f.setCaretColor(Color.WHITE);
         f.setBorder(BorderFactory.createCompoundBorder(
                 new LineBorder(BORDER_COLOR, 1, true),
                 new EmptyBorder(6, 10, 6, 10)));

@@ -89,8 +89,10 @@ public class ExpenseTracker {
         );
         JFrame frame = new JFrame("Expenses Chart");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.add(new ChartPanel(barChart));
-        frame.setSize(800, 400);
+        ChartPanel chartPanel = new ChartPanel(barChart);
+        chartPanel.setPreferredSize(new java.awt.Dimension(800, 400));
+        frame.add(chartPanel);
+        frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }

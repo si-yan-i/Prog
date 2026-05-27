@@ -1,12 +1,12 @@
-import javax.swing.*;
-import javax.swing.border.*;
-import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.*;
 import java.io.File;
 import java.util.*;
 import java.util.List;
+import javax.swing.*;
+import javax.swing.border.*;
+import javax.swing.table.*;
 
 
 public class ExpenseTrackerUI extends JFrame {
@@ -53,47 +53,41 @@ public class ExpenseTrackerUI extends JFrame {
         super("CentSible: Expense Tracker");
         this.loggedInUser = (username != null && !username.isBlank()) ? username : "User";
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1100, 700);
-        setMinimumSize(new Dimension(900, 600));
-        setLocationRelativeTo(null);
+        setMinimumSize(new Dimension(980, 680));
         setBackground(BG_PRIMARY);
 
         toast = new Toast(this);
-
-        JPanel root = new JPanel(new BorderLayout(0, 0));
-        root.setBackground(BG_PRIMARY);
-        root.setBorder(new EmptyBorder(16, 18, 16, 18));
-
-        root.add(buildTopBar(), BorderLayout.NORTH);
-        root.add(buildMetricsBar(), BorderLayout.CENTER);
-
-        JPanel centerWrap = new JPanel(new BorderLayout(12, 0));
-        centerWrap.setOpaque(false);
-        centerWrap.add(buildLeftPanel(), BorderLayout.WEST);
-        centerWrap.add(buildRightPanel(), BorderLayout.CENTER);
-
-        JPanel centerContainer = new JPanel(new BorderLayout());
-        centerContainer.setOpaque(false);
-        centerContainer.setBorder(new EmptyBorder(12, 0, 0, 0));
-        centerContainer.add(centerWrap, BorderLayout.CENTER);
-
-        root.add(centerContainer, BorderLayout.SOUTH);
 
         setLayout(new BorderLayout());
         JPanel mainWrap = new JPanel(new BorderLayout(0, 12));
         mainWrap.setBackground(BG_PRIMARY);
         mainWrap.setBorder(new EmptyBorder(16, 18, 16, 18));
-        mainWrap.add(buildTopBar(), BorderLayout.NORTH);
-        mainWrap.add(buildMetricsBar(), BorderLayout.CENTER);
 
-        JPanel mid = new JPanel(new BorderLayout(12, 0));
+        JPanel header = new JPanel();
+        header.setOpaque(false);
+        header.setLayout(new BoxLayout(header, BoxLayout.Y_AXIS));
+        header.add(buildTopBar());
+        header.add(buildMetricsBar());
+
+        mainWrap.add(header, BorderLayout.NORTH);
+
+        JPanel leftPanel = buildLeftPanel();
+        JPanel rightPanel = buildRightPanel();
+
+        JSplitPane mid = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
         mid.setOpaque(false);
         mid.setBorder(new EmptyBorder(12, 0, 0, 0));
-        mid.add(buildLeftPanel(), BorderLayout.WEST);
-        mid.add(buildRightPanel(), BorderLayout.CENTER);
-        mainWrap.add(mid, BorderLayout.SOUTH);
+        mid.setContinuousLayout(true);
+        mid.setResizeWeight(0.24);
+        mid.setDividerSize(10);
+        mid.setOneTouchExpandable(true);
+        mainWrap.add(mid, BorderLayout.CENTER);
 
         add(mainWrap);
+        setResizable(true);
+        pack();
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setLocationRelativeTo(null);
         refresh();
     }
 
@@ -176,7 +170,6 @@ public class ExpenseTrackerUI extends JFrame {
         JPanel p = new JPanel();
         p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
         p.setOpaque(false);
-        p.setPreferredSize(new Dimension(290, 0));
 
         p.add(buildAddPanel());
         p.add(Box.createVerticalStrut(10));
@@ -366,12 +359,25 @@ public class ExpenseTrackerUI extends JFrame {
         expenseTable.setShowGrid(false);
         expenseTable.setIntercellSpacing(new Dimension(0, 4));
         expenseTable.setBackground(BG_PRIMARY);
+        expenseTable.setForeground(TEXT_PRIMARY);
         expenseTable.setSelectionBackground(new Color(230, 241, 251));
         expenseTable.setSelectionForeground(TEXT_PRIMARY);
         expenseTable.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 11));
-        expenseTable.getTableHeader().setForeground(TEXT_MUTED);
+        expenseTable.getTableHeader().setForeground(TEXT_PRIMARY);
         expenseTable.getTableHeader().setBackground(BG_PRIMARY);
         expenseTable.getTableHeader().setBorder(new MatteBorder(0, 0, 1, 0, BORDER_COLOR));
+
+        expenseTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+                                                           boolean hasFocus, int row, int column) {
+                JLabel label = (JLabel) super.getTableCellRendererComponent(
+                        table, value, isSelected, hasFocus, row, column);
+                label.setForeground(isSelected ? TEXT_PRIMARY : TEXT_PRIMARY);
+                label.setBackground(isSelected ? table.getSelectionBackground() : BG_PRIMARY);
+                return label;
+            }
+        });
 
 
         expenseTable.getColumnModel().getColumn(0).setMaxWidth(36);
@@ -411,6 +417,7 @@ public class ExpenseTrackerUI extends JFrame {
 
         DefaultTableCellRenderer amtRenderer = new DefaultTableCellRenderer();
         amtRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
+        amtRenderer.setForeground(TEXT_PRIMARY);
         expenseTable.getColumnModel().getColumn(4).setCellRenderer(amtRenderer);
 
         JScrollPane scroll = new JScrollPane(expenseTable);
@@ -737,10 +744,11 @@ public class ExpenseTrackerUI extends JFrame {
     }
 
     private JTextField inputField(String placeholder) {
-        JTextField f = new JTextField();
+        JTextField f = new JTextField(18);
         f.setFont(new Font("SansSerif", Font.PLAIN, 13));
         f.setBackground(BG_SECONDARY);
-        f.setForeground(TEXT_PRIMARY);
+        f.setForeground(Color.WHITE);
+        f.setCaretColor(Color.WHITE);
         f.setBorder(BorderFactory.createCompoundBorder(
                 new LineBorder(BORDER_COLOR, 1, true),
                 new EmptyBorder(4, 8, 4, 8)));
